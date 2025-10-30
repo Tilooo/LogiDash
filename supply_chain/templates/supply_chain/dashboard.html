@@ -1,0 +1,51 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}
+    LogiDash - Dashboard
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid px-4 py-5">
+        <h1 class="display-5 fw-bold">Supply Chain Overview</h1>
+        <p class="fs-4">Welcome to the LogiDash analytics platform.</p>
+        
+        <hr class="my-4">
+
+        <div class="row g-4">
+            <!-- Stat Card for Products -->
+            <div class="col-md-6">
+                <div class="card text-white bg-primary shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Unique Products</h5>
+                        <p class="card-text fs-1 fw-bold">{{ product_count }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stat Card for Suppliers -->
+            <div class="col-md-6">
+                <div class="card text-dark bg-warning shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Suppliers</h5>
+                        <p class="card-text fs-1 fw-bold">{{ supplier_count }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder for Power BI Report -->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h3>Interactive Report</h3>
+                    </div>
+                    <div class="card-body text-center" style="height: 600px;">
+                        <p class="text-muted">Power BI dashboard will be embedded here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
