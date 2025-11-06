@@ -1,4 +1,5 @@
 {% extends 'supply_chain/base.html' %}
+{% load static %}
 
 {% block title %}
     LogiDash - Dashboard
@@ -8,7 +9,7 @@
     <div class="container-fluid px-4 py-5">
         <h1 class="display-5 fw-bold">Supply Chain Overview</h1>
         <p class="fs-4">Welcome to the LogiDash analytics platform.</p>
-        
+
         <hr class="my-4">
 
         <div class="row g-4">
@@ -35,17 +36,22 @@
 
         <!-- Placeholder for Power BI Report -->
         <div class="row mt-5">
-            <div class="col">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h3>Interactive Report</h3>
-                    </div>
-                    <div class="card-body text-center" style="height: 600px;">
-                        <p class="text-muted">Power BI dashboard will be embedded here.</p>
-                    </div>
-                </div>
+    <div class="col">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h3>Interactive Report</h3>
+            </div>
+            <div class="card-body p-0">
+                <a href="{% static 'supply_chain/images/dashboard_report.png' %}" target="_blank">
+                   <img src="{% static 'supply_chain/images/dashboard_report.png' %}" alt="Power BI Report Snapshot" style="width: 100%; height: auto;">
+                </a>
+            </div>
+            <div class="card-footer text-muted">
+                Static report image. Interactive version available upon request.
             </div>
         </div>
+    </div>
+</div>
 
     </div>
 {% endblock %}
