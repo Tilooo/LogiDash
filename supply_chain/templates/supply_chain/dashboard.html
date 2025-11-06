@@ -6,52 +6,138 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid px-4 py-5">
-        <h1 class="display-5 fw-bold">Supply Chain Overview</h1>
-        <p class="fs-4">Welcome to the LogiDash analytics platform.</p>
+<style>
+    /* Dashboard Custom Styles*/
+    body {
+        background: linear-gradient(135deg, #f0f4f8, #e0ebff);
+        font-family: 'Poppins', sans-serif;
+    }
 
-        <hr class="my-4">
+    h1.display-5 {
+        color: #1a237e;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
 
-        <div class="row g-4">
-            <!-- Stat Card for Products -->
-            <div class="col-md-6">
-                <div class="card text-white bg-primary shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Unique Products</h5>
-                        <p class="card-text fs-1 fw-bold">{{ product_count }}</p>
-                    </div>
-                </div>
-            </div>
+    .card {
+        border: none;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
 
-            <!-- Stat Card for Suppliers -->
-            <div class="col-md-6">
-                <div class="card text-dark bg-warning shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Total Suppliers</h5>
-                        <p class="card-text fs-1 fw-bold">{{ supplier_count }}</p>
-                    </div>
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .card-body h5 {
+        letter-spacing: 0.5px;
+    }
+
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent);
+        pointer-events: none;
+    }
+
+    /* Color cards */
+    .bg-primary {
+        background: linear-gradient(135deg, #007bff, #00b4d8);
+    }
+
+    .bg-warning {
+        background: linear-gradient(135deg, #fbc02d, #ffb300);
+    }
+
+    /* Card footer */
+    .card-footer {
+        background: #fafafa;
+        font-size: 0.9rem;
+        border-top: 1px solid #eee;
+    }
+
+    /* Report Card */
+    .card-header h3 {
+        color: #37474f;
+        font-weight: 600;
+    }
+
+    .dashboard-img {
+        width: 100%;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+        transition: opacity 0.3s ease;
+    }
+
+    .dashboard-img:hover {
+        opacity: 0.9;
+    }
+
+    /* Fade-in animation */
+    .fade-in {
+        animation: fadeInUp 0.6s ease both;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="container-fluid px-4 py-5">
+    <div class="text-center mb-5 fade-in">
+        <h1 class="display-5 fw-bold"> Supply Chain Overview</h1>
+        <p class="fs-4 text-secondary">Welcome to the <strong>LogiDash</strong> analytics platform</p>
+        <hr class="w-25 mx-auto my-4">
+    </div>
+
+    <div class="row g-4">
+        <!-- Stat Card for Products -->
+        <div class="col-md-6 fade-in">
+            <div class="card text-white stat-card bg-primary shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase">Total Unique Products</h5>
+                    <p class="card-text fs-1 fw-bold">{{ product_count }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Placeholder for Power BI Report -->
-        <div class="row mt-5">
-    <div class="col">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h3>Interactive Report</h3>
+        <!-- Stat Card for Suppliers -->
+        <div class="col-md-6 fade-in">
+            <div class="card text-dark stat-card bg-warning shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-uppercase">Total Suppliers</h5>
+                    <p class="card-text fs-1 fw-bold">{{ supplier_count }}</p>
+                </div>
             </div>
-            <div class="card-body p-0">
-                <a href="{% static 'supply_chain/images/dashboard_report.png' %}" target="_blank">
-                   <img src="{% static 'supply_chain/images/dashboard_report.png' %}" alt="Power BI Report Snapshot" style="width: 100%; height: auto;">
-                </a>
-            </div>
-            <div class="card-footer text-muted">
-                Static report image. Interactive version available upon request.
+        </div>
+    </div>
+
+    <!-- Power BI Report Section -->
+    <div class="row mt-5 fade-in">
+        <div class="col">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"> Interactive Report</h3>
+                    <span class="badge bg-info text-dark">Preview</span>
+                </div>
+                <div class="card-body p-0">
+                    <a href="{% static 'supply_chain/images/dashboard_report.png' %}" target="_blank">
+                        <img src="{% static 'supply_chain/images/dashboard_report.png' %}" alt="Power BI Report Snapshot" class="dashboard-img">
+                    </a>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    Static report image — Interactive version available upon request.
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-    </div>
 {% endblock %}
