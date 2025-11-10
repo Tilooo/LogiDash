@@ -7,26 +7,49 @@
 
 {% block content %}
 <style>
-    /* Dashboard Custom Styles*/
+    :root {
+        /* Light theme colors */
+        --bg-gradient: linear-gradient(135deg, #f0f4f8, #e0ebff);
+        --text-color: #1a237e;
+        --card-bg: #ffffff;
+        --card-footer-bg: #fafafa;
+        --card-header-bg: #f8f9fa;
+        --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] {
+        /* Dark theme overrides */
+        --bg-gradient: linear-gradient(135deg, #111827, #1e293b);
+        --text-color: #e2e8f0;
+        --card-bg: #1f2937;
+        --card-footer-bg: #111827;
+        --card-header-bg: #1e293b;
+        --shadow-color: rgba(0, 0, 0, 0.6);
+    }
+
     body {
-        background: linear-gradient(135deg, #f0f4f8, #e0ebff);
+        background: var(--bg-gradient);
         font-family: 'Poppins', sans-serif;
+        color: var(--text-color);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     h1.display-5 {
-        color: #1a237e;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        color: var(--text-color);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
     }
 
     .card {
         border: none;
         border-radius: 1rem;
+        background: var(--card-bg);
+        box-shadow: 0 4px 12px var(--shadow-color);
         transition: all 0.3s ease;
     }
 
     .card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        box-shadow: 0 8px 20px var(--shadow-color);
     }
 
     .card-body h5 {
@@ -47,7 +70,7 @@
         pointer-events: none;
     }
 
-    /* Color cards */
+    /* Gradient stat cards */
     .bg-primary {
         background: linear-gradient(135deg, #1aeb51, #645c96);
     }
@@ -56,17 +79,19 @@
         background: linear-gradient(135deg, #b0fa05, #ffb300);
     }
 
-    /* Card footer */
     .card-footer {
-        background: #fafafa;
+        background: var(--card-footer-bg);
         font-size: 0.9rem;
-        border-top: 1px solid #eee;
+        border-top: 1px solid rgba(255,255,255,0.05);
     }
 
-    /* Report Card */
+    .card-header {
+        background: var(--card-header-bg);
+    }
+
     .card-header h3 {
-        color: #37474f;
         font-weight: 600;
+        color: var(--text-color);
     }
 
     .dashboard-img {
@@ -80,7 +105,6 @@
         opacity: 0.9;
     }
 
-    /* Fade-in animation */
     .fade-in {
         animation: fadeInUp 0.6s ease both;
     }
@@ -89,17 +113,45 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Toggle Button */
+    .theme-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: var(--card-bg);
+        color: var(--text-color);
+        border: none;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px var(--shadow-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+    }
 </style>
+
+<!-- Theme Toggle Button -->
+<button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+    🌙
+</button>
 
 <div class="container-fluid px-4 py-5">
     <div class="text-center mb-5 fade-in">
-        <h1 class="display-5 fw-bold"> Supply Chain Overview</h1>
+        <h1 class="display-5 fw-bold">Supply Chain Overview</h1>
         <p class="fs-4 text-secondary">Welcome to the <strong>LogiDash</strong> analytics platform</p>
         <hr class="w-25 mx-auto my-4">
     </div>
 
     <div class="row g-4">
-        <!-- Stat Card for Products -->
         <div class="col-md-6 fade-in">
             <div class="card text-white stat-card bg-primary shadow-sm">
                 <div class="card-body">
@@ -109,7 +161,6 @@
             </div>
         </div>
 
-        <!-- Stat Card for Suppliers -->
         <div class="col-md-6 fade-in">
             <div class="card text-dark stat-card bg-warning shadow-sm">
                 <div class="card-body">
@@ -120,17 +171,17 @@
         </div>
     </div>
 
-    <!-- Power BI Report Section -->
     <div class="row mt-5 fade-in">
         <div class="col">
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"> Interactive Report</h3>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Interactive Report</h3>
                     <span class="badge bg-info text-dark">Preview</span>
                 </div>
                 <div class="card-body p-0">
                     <a href="{% static 'supply_chain/images/dashboard_report.png' %}" target="_blank">
-                        <img src="{% static 'supply_chain/images/dashboard_report.png' %}" alt="Power BI Report Snapshot" class="dashboard-img">
+                        <img src="{% static 'supply_chain/images/dashboard_report.png' %}"
+                             alt="Power BI Report Snapshot" class="dashboard-img">
                     </a>
                 </div>
                 <div class="card-footer text-muted text-center">
@@ -140,4 +191,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    // * Theme Toggle Logic *
+    const toggleBtn = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+    toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = root.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', newTheme);
+        toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        localStorage.setItem('theme', newTheme);
+    });
+</script>
 {% endblock %}
