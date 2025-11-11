@@ -8,7 +8,7 @@
 {% block content %}
 <style>
     :root {
-        /* Light theme colors */
+        /* Light Theme */
         --bg-gradient: linear-gradient(135deg, #f0f4f8, #e0ebff);
         --text-color: #1a237e;
         --card-bg: #ffffff;
@@ -18,7 +18,7 @@
     }
 
     [data-theme="dark"] {
-        /* Dark theme overrides */
+        /* Dark Theme */
         --bg-gradient: linear-gradient(135deg, #111827, #1e293b);
         --text-color: #e2e8f0;
         --card-bg: #1f2937;
@@ -114,7 +114,7 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Toggle Button */
+    /* Theme Toggle */
     .theme-toggle {
         position: fixed;
         top: 1.5rem;
@@ -137,12 +137,17 @@
     .theme-toggle:hover {
         transform: scale(1.1);
     }
+
+    /* Counter animation style */
+    .counter {
+        font-size: 3rem;
+        font-weight: 700;
+        transition: color 0.3s ease;
+    }
 </style>
 
-<!-- Theme Toggle Button -->
-<button class="theme-toggle" id="theme-toggle" title="Toggle theme">
-    🌙
-</button>
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
 
 <div class="container-fluid px-4 py-5">
     <div class="text-center mb-5 fade-in">
@@ -152,25 +157,28 @@
     </div>
 
     <div class="row g-4">
+        <!-- Products -->
         <div class="col-md-6 fade-in">
             <div class="card text-white stat-card bg-primary shadow-sm">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h5 class="card-title text-uppercase">Total Unique Products</h5>
-                    <p class="card-text fs-1 fw-bold">{{ product_count }}</p>
+                    <p class="card-text counter" data-target="{{ product_count }}">0</p>
                 </div>
             </div>
         </div>
 
+        <!-- Suppliers -->
         <div class="col-md-6 fade-in">
             <div class="card text-dark stat-card bg-warning shadow-sm">
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h5 class="card-title text-uppercase">Total Suppliers</h5>
-                    <p class="card-text fs-1 fw-bold">{{ supplier_count }}</p>
+                    <p class="card-text counter" data-target="{{ supplier_count }}">0</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Report -->
     <div class="row mt-5 fade-in">
         <div class="col">
             <div class="card shadow-sm border-0">
@@ -193,21 +201,47 @@
 </div>
 
 <script>
-    // * Theme Toggle Logic *
+    // * Theme Toggle *
     const toggleBtn = document.getElementById('theme-toggle');
     const root = document.documentElement;
-
-    // Load saved theme
     const savedTheme = localStorage.getItem('theme') || 'light';
     root.setAttribute('data-theme', savedTheme);
     toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
     toggleBtn.addEventListener('click', () => {
-        const currentTheme = root.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const newTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         root.setAttribute('data-theme', newTheme);
         toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
         localStorage.setItem('theme', newTheme);
     });
+
+    // * Animated Counters *
+    const counters = document.querySelectorAll('.counter');
+    const speed = 120; // lower = faster
+
+    const animateCounter = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+
+        const increment = target / speed;
+
+        if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(() => animateCounter(counter), 25);
+        } else {
+            counter.innerText = target.toLocaleString();
+        }
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(counter => observer.observe(counter));
 </script>
 {% endblock %}
