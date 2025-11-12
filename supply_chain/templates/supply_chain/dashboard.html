@@ -6,6 +6,9 @@
 {% endblock %}
 
 {% block content %}
+<!-- Bootstrap Icons (for sun & moon) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <style>
     :root {
         /* Light Theme */
@@ -52,10 +55,6 @@
         box-shadow: 0 8px 20px var(--shadow-color);
     }
 
-    .card-body h5 {
-        letter-spacing: 0.5px;
-    }
-
     .stat-card {
         position: relative;
         overflow: hidden;
@@ -87,11 +86,6 @@
 
     .card-header {
         background: var(--card-header-bg);
-    }
-
-    .card-header h3 {
-        font-weight: 600;
-        color: var(--text-color);
     }
 
     .dashboard-img {
@@ -138,6 +132,11 @@
         transform: scale(1.1);
     }
 
+    .theme-toggle i {
+        font-size: 1.3rem;
+        transition: opacity 0.3s ease;
+    }
+
     /* Counter animation style */
     .counter {
         font-size: 3rem;
@@ -147,7 +146,9 @@
 </style>
 
 <!-- Theme Toggle -->
-<button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
+<button class="theme-toggle" id="theme-toggle" title="Toggle theme">
+    <i id="theme-icon" class="bi bi-moon-fill"></i>
+</button>
 
 <div class="container-fluid px-4 py-5">
     <div class="text-center mb-5 fade-in">
@@ -157,20 +158,18 @@
     </div>
 
     <div class="row g-4">
-        <!-- Products -->
         <div class="col-md-6 fade-in">
-            <div class="card text-white stat-card bg-primary shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-white stat-card bg-primary shadow-sm text-center">
+                <div class="card-body">
                     <h5 class="card-title text-uppercase">Total Unique Products</h5>
                     <p class="card-text counter" data-target="{{ product_count }}">0</p>
                 </div>
             </div>
         </div>
 
-        <!-- Suppliers -->
         <div class="col-md-6 fade-in">
-            <div class="card text-dark stat-card bg-warning shadow-sm">
-                <div class="card-body text-center">
+            <div class="card text-dark stat-card bg-warning shadow-sm text-center">
+                <div class="card-body">
                     <h5 class="card-title text-uppercase">Total Suppliers</h5>
                     <p class="card-text counter" data-target="{{ supplier_count }}">0</p>
                 </div>
@@ -178,7 +177,6 @@
         </div>
     </div>
 
-    <!-- Report -->
     <div class="row mt-5 fade-in">
         <div class="col">
             <div class="card shadow-sm border-0">
@@ -203,15 +201,17 @@
 <script>
     // * Theme Toggle *
     const toggleBtn = document.getElementById('theme-toggle');
+    const icon = document.getElementById('theme-icon');
     const root = document.documentElement;
+
     const savedTheme = localStorage.getItem('theme') || 'light';
     root.setAttribute('data-theme', savedTheme);
-    toggleBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    icon.className = savedTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
 
     toggleBtn.addEventListener('click', () => {
         const newTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         root.setAttribute('data-theme', newTheme);
-        toggleBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        icon.className = newTheme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
         localStorage.setItem('theme', newTheme);
     });
 
@@ -222,7 +222,6 @@
     const animateCounter = (counter) => {
         const target = +counter.getAttribute('data-target');
         const count = +counter.innerText;
-
         const increment = target / speed;
 
         if (count < target) {
