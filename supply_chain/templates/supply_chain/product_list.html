@@ -5,39 +5,110 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid px-4 py-5">
-        <h1 class="display-5 fw-bold">Product Catalog</h1>
-        <p class="fs-4">A complete list of all products in the supply chain.</p>
-        
-        <hr class="my-4">
 
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <table class="table table-striped table-hover">
-                    <thead class="table-dark">
+<style>
+    :root {
+        --text-color: #1a237e;
+        --card-bg: #ffffff;
+        --card-header-bg: #f8f9fa;
+        --shadow-color: rgba(0,0,0,0.1);
+        --table-header-bg: #1f2937;  /* dark navy */
+        --table-header-text: #ffffff;
+        --table-hover-bg: rgba(0,0,0,0.05);
+    }
+
+    [data-theme="dark"] {
+        --text-color: #e2e8f0;
+        --card-bg: #1f2937;
+        --card-header-bg: #111827;
+        --shadow-color: rgba(0,0,0,0.6);
+        --table-header-bg: #0f172a;   /* darker navy */
+        --table-header-text: #e2e8f0;
+        --table-hover-bg: rgba(255,255,255,0.05);
+    }
+
+    h1.display-5 {
+        color: var(--text-color);
+        text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Card styling */
+    .card {
+        border: none;
+        border-radius: 1rem;
+        background: var(--card-bg);
+        box-shadow: 0 4px 12px var(--shadow-color);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px var(--shadow-color);
+    }
+
+    .fade-in {
+        animation: fadeInUp 0.6s ease both;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Table styling */
+    table {
+        color: var(--text-color);
+    }
+
+    thead {
+        background: var(--table-header-bg) !important;
+        color: var(--table-header-text) !important;
+    }
+
+    tbody tr:hover {
+        background: var(--table-hover-bg) !important;
+        transition: background 0.2s ease;
+    }
+</style>
+
+<div class="container-fluid px-4 py-5 fade-in">
+
+    <h1 class="display-5 fw-bold">Product Catalog</h1>
+    <p class="fs-4 text-secondary">A complete list of all products in the supply chain.</p>
+
+    <hr class="my-4">
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <table class="table align-middle table-hover">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th>Supplier</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
                         <tr>
-                            <th>SKU</th>
-                            <th>Product Name</th>
-                            <th>Supplier</th>
-                            <th>Description</th>
+                            <td>{{ product.sku }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.supplier.name }}</td>
+                            <td>{{ product.description }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for product in products %}
-                            <tr>
-                                <td>{{ product.sku }}</td>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.supplier.name }}</td>
-                                <td>{{ product.description }}</td>
-                            </tr>
-                        {% empty %}
-                            <tr>
-                                <td colspan="4">No products found.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No products found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
         </div>
     </div>
+
+</div>
+
 {% endblock %}
