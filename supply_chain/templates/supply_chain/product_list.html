@@ -8,42 +8,47 @@
 
 <style>
     :root {
+        --bg-gradient: linear-gradient(135deg, #f0f4f8, #e0ebff);
         --text-color: #1a237e;
         --card-bg: #ffffff;
-        --card-header-bg: #f8f9fa;
         --shadow-color: rgba(0,0,0,0.1);
-        --table-header-bg: #1f2937;  /* dark navy */
+        --table-header-bg: #1f2937;
         --table-header-text: #ffffff;
         --table-hover-bg: rgba(0,0,0,0.05);
+        --input-bg: #ffffff;
+        --input-border: #ced4da;
     }
 
     [data-theme="dark"] {
+        --bg-gradient: linear-gradient(135deg, #111827, #1e293b);
         --text-color: #e2e8f0;
         --card-bg: #1f2937;
-        --card-header-bg: #111827;
         --shadow-color: rgba(0,0,0,0.6);
-        --table-header-bg: #0f172a;   /* darker navy */
+        --table-header-bg: #0f172a;
         --table-header-text: #e2e8f0;
         --table-hover-bg: rgba(255,255,255,0.05);
+        --input-bg: #2c2c2c;
+        --input-border: #444;
+    }
+
+    body {
+        background: var(--bg-gradient);
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-color);
+        transition: background 0.4s ease, color 0.4s ease;
     }
 
     h1.display-5 {
         color: var(--text-color);
-        text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
     }
 
-    /* Card styling */
     .card {
         border: none;
         border-radius: 1rem;
         background: var(--card-bg);
         box-shadow: 0 4px 12px var(--shadow-color);
         transition: all 0.3s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 20px var(--shadow-color);
     }
 
     .fade-in {
@@ -56,67 +61,107 @@
     }
 
     /* Table styling */
-    table {
+    .table {
         color: var(--text-color);
     }
 
-    thead {
-        background: var(--table-header-bg) !important;
-        color: var(--table-header-text) !important;
+    .table thead {
+        background-color: transparent !important;
+        border-bottom: 2px solid var(--text-color);
     }
 
-    tbody tr:hover {
-        background: var(--table-hover-bg) !important;
-        transition: background 0.2s ease;
+    .table th {
+        color: var(--text-color);
+        font-weight: 600;
     }
+
+    .table tbody tr:hover {
+        background-color: var(--table-hover-bg) !important;
+        transform: scale(1.01);
+        transition: transform 0.2s ease, background-color 0.2s ease;
+        box-shadow: 0 4px 12px var(--shadow-color);
+    }
+
+    .table-responsive {
+        border-radius: 0.5rem;
+    }
+
+    /* Search Form Styling */
+    .search-form .form-control {
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border);
+        color: var(--text-color);
+        border-radius: 0.5rem;
+    }
+    .search-form .form-control::placeholder {
+        color: var(--text-color);
+        opacity: 0.6;
+    }
+    .search-form .form-control:focus {
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    }
+    .search-form .btn-primary {
+        background: linear-gradient(135deg, #1aeb51, #645c96);
+        border: none;
+        border-radius: 0.5rem;
+    }
+
 </style>
 
 <div class="container-fluid px-4 py-5 fade-in">
 
-    <h1 class="display-5 fw-bold">Product Catalog</h1>
-    <p class="fs-4 text-secondary">A complete list of all products in the supply chain.</p>
-
-    <hr class="my-4">
-    <div class="card shadow-sm mb-4">
-    <div class="card-body">
-        <form method="GET" action="{% url 'product-list' %}" class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search by Product Name or SKU..." name="q" value="{{ search_query }}">
-            <button class="btn btn-primary" type="submit">Search</button>
-        </form>
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Product Catalog</h1>
+        <p class="fs-4 text-secondary">Search, filter, and explore all products in the supply chain.</p>
+        <hr class="w-25 mx-auto my-4">
     </div>
-</div>
+
+    <!-- Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" action="{% url 'product-list' %}" class="d-flex search-form">
+                <input class="form-control me-2" type="search" placeholder="Search by Product Name, SKU, or Description..." name="q" value="{{ search_query }}">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>    <!-- end search form -->
 
     <div class="card shadow-sm">
         <div class="card-body">
-
-            <table class="table align-middle table-hover">
-                <thead>
-                    <tr>
-                        <th>SKU</th>
-                        <th>Product Name</th>
-                        <th>Supplier</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in products %}
+            <div class="table-responsive">
+                <table class="table align-middle table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ product.sku }}</td>
-                            <td>{{ product.name }}</td>
-                            <td>{{ product.supplier.name }}</td>
-                            <td>{{ product.description }}</td>
+                            <th>SKU</th>
+                            <th>Product Name</th>
+                            <th>Supplier</th>
+                            <th>Description</th>
                         </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center">No products found.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                            <tr>
+                                <td><code>{{ product.sku }}</code></td>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.supplier.name }}</td>
+                                <td>{{ product.description|truncatewords:15 }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5">
+                                    <h4>No Products Found</h4>
+                                    <p class="text-secondary">Your search for "{{ search_query }}" did not match any products.</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
 </div>
 
 {% endblock %}
