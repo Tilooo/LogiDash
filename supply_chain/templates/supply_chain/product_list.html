@@ -77,6 +77,14 @@
     <p class="fs-4 text-secondary">A complete list of all products in the supply chain.</p>
 
     <hr class="my-4">
+    <div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="GET" action="{% url 'product-list' %}" class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search by Product Name or SKU..." name="q" value="{{ search_query }}">
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+</div>
 
     <div class="card shadow-sm">
         <div class="card-body">

@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .models import Product, Supplier
 import plotly.express as px
 import pandas as pd
+from django.db.models import Q
 
 
 def dashboard_view(request):
@@ -52,6 +53,21 @@ def dashboard_view(request):
     return render(request, 'supply_chain/dashboard.html', context)
 
 def product_list_view(request):
+    search_query = request.GET.get('q', '')
+
     products = Product.objects.all()
-    context = {'products': products}
+
+    # if a search query exists, filter the products
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) |
+            Q(sku__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+
+    context = {
+        'products': products,
+        'search_query': search_query,
+    }
+
     return render(request, 'supply_chain/product_list.html', context)
