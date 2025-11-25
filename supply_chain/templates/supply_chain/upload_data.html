@@ -1,0 +1,91 @@
+{% extends 'supply_chain/base.html' %}
+
+{% block title %}
+    Upload Data - LogiDash
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .upload-card { max-width: 600px; margin: auto; }
+    .drop-zone {
+        border: 2px dashed #ccc;
+        border-radius: 1rem;
+        padding: 50px;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+    .drop-zone:hover { background-color: rgba(0,0,0,0.05); }
+    .drop-zone--over { border-style: solid; }
+    .drop-zone__input { display: none; }
+</style>
+
+<div class="container-fluid px-4 py-5 fade-in">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold">Upload New Data</h1>
+        <p class="fs-4 text-secondary">Upload a CSV file to update the supply chain database.</p>
+        <hr class="w-25 mx-auto my-4">
+    </div>
+
+    <div class="card shadow-sm upload-card">
+        <div class="card-body p-4">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="drop-zone">
+                    <span class="drop-zone__prompt">
+                        <i class="bi bi-cloud-arrow-up fs-1"></i><br>
+                        Drag & Drop file here or click to select
+                    </span>
+                    <input type="file" name="csv_file" class="drop-zone__input" accept=".csv" required>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">Upload and Process</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript for Drag & Drop UI
+    document.querySelectorAll(".drop-zone__input").forEach(inputElement => {
+        const dropZoneElement = inputElement.closest(".drop-zone");
+
+        dropZoneElement.addEventListener("click", e => {
+            inputElement.click();
+        });
+
+        inputElement.addEventListener("change", e => {
+            if (inputElement.files.length) {
+                updateThumbnail(dropZoneElement, inputElement.files[0]);
+            }
+        });
+
+        dropZoneElement.addEventListener("dragover", e => {
+            e.preventDefault();
+            dropZoneElement.classList.add("drop-zone--over");
+        });
+
+        ["dragleave", "dragend"].forEach(type => {
+            dropZoneElement.addEventListener(type, e => {
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        dropZoneElement.addEventListener("drop", e => {
+            e.preventDefault();
+            if (e.dataTransfer.files.length) {
+                inputElement.files = e.dataTransfer.files;
+                updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+            }
+            dropZoneElement.classList.remove("drop-zone--over");
+        });
+    });
+
+    function updateThumbnail(dropZoneElement, file) {
+        const promptElement = dropZoneElement.querySelector(".drop-zone__prompt");
+        promptElement.innerHTML = `<i class="bi bi-file-earmark-spreadsheet fs-1"></i><br>${file.name}`;
+    }
+</script>
+{% endblock %}
