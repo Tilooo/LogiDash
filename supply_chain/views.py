@@ -1,11 +1,14 @@
 # supply_chain/views.py
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Product, Supplier
 import plotly.express as px
 import pandas as pd
 from django.db.models import Q
-
+from django.core.management import call_command
+from django.core.files.storage import FileSystemStorage
+import os
+from django.conf import settings
 
 def dashboard_view(request):
     product_count = Product.objects.count()
@@ -71,3 +74,24 @@ def product_list_view(request):
     }
 
     return render(request, 'supply_chain/product_list.html', context)
+
+
+def upload_data_view(request):
+    if request.method == 'POST' and request.FILES.get('csv_file'):
+        uploaded_file = request.FILES['csv_file']
+
+        fs = FileSystemStorage()
+        temp_file_name = 'DataCoSupplyChainDataset.csv'
+        if fs.exists(temp_file_name):
+            fs.delete(temp_file_name)
+
+        fs.save(temp_file_name, uploaded_file)
+
+        try:
+            call_command('import_data')
+        except Exception as e:
+            print(f"Error during import: {e}")
+
+        return redirect('product-list')
+
+    return render(request, 'supply_chain/upload_data.html')
