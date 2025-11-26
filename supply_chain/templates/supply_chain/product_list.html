@@ -1,7 +1,7 @@
 {% extends 'supply_chain/base.html' %}
 
 {% block title %}
-    Product List - LogiDash
+Product List - LogiDash
 {% endblock %}
 
 {% block page_id %}products-page{% endblock %}
@@ -9,96 +9,124 @@
 {% block content %}
 
 <style>
-    /* Styles */
-    :root {
-        --input-bg-light: #ffffff;
-        --input-border-light: #ced4da;
-        --input-bg-dark: #2c2c2c;
-        --input-border-dark: #444;
-    }
-    body {
-        --input-bg: var(--input-bg-light);
-        --input-border: var(--input-border-light);
-    }
-    [data-theme="dark"] body {
-        --input-bg: var(--input-bg-dark);
-        --input-border: var(--input-border-dark);
-    }
-
-    .fade-in {
-        animation: fadeInUp 0.6s ease both;
-    }
-
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
     /* Table styling */
-    .table thead {
-        border-bottom: 2px solid var(--text-color);
+    .table {
+        margin-bottom: 0;
+        color: var(--text-color);
     }
 
-    .table th {
-        color: var(--text-color);
+    .table thead th {
+        border-bottom: 2px solid var(--navbar-border);
+        color: var(--heading-color);
         font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+        padding: 1rem;
+        background-color: transparent;
+    }
+
+    .table tbody td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--navbar-border);
+        color: var(--text-color);
+    }
+
+    .table tbody tr {
+        transition: background-color 0.2s ease;
     }
 
     .table tbody tr:hover {
-        transform: scale(1.01);
-        transition: transform 0.2s ease, background-color 0.2s ease;
-        box-shadow: 0 4px 12px var(--shadow-sm);
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    [data-theme="dark"] .table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.02);
     }
 
     /* Search Form Styling */
     .search-form .form-control {
-        background-color: var(--input-bg);
-        border: 1px solid var(--input-border);
-        color: var(--text-color);
-        border-radius: 0.5rem;
+        background-color: var(--bg-color);
+        border: 1px solid var(--navbar-border);
+        color: var(--text-color) !important;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
     }
+
     .search-form .form-control::placeholder {
         color: var(--text-color);
         opacity: 0.6;
     }
+
     .search-form .form-control:focus {
-        background-color: var(--input-bg);
-        color: var(--text-color);
+        background-color: var(--bg-color);
+        color: var(--text-color) !important;
         border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, .25);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
-    .search-form .btn-primary {
-        background-color: var(--primary-color);
-        border: none;
-        border-radius: 0.5rem;
+
+    .fade-in {
+        animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
-     .search-form .btn-primary:hover {
-        background-color: var(--primary-hover);
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .gradient-text {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .date-badge {
+        background-color: var(--card-bg);
+        border: 1px solid var(--navbar-border);
+        box-shadow: var(--shadow-sm);
     }
 </style>
 
-<div class="container-fluid px-4 py-5 fade-in">
+<div class="container-fluid px-0 py-5 fade-in">
 
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Product Catalog</h1>
-        <p class="fs-4 text-secondary">Search, filter, and explore all products in the supply chain.</p>
-        <hr class="w-25 mx-auto my-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
+        <div>
+            <h1 class="fw-bold mb-2" style="font-size: 2.5rem; letter-spacing: -0.02em; color: var(--heading-color);">
+                Product <span class="gradient-text">Catalog</span>
+            </h1>
+            <p class="text-muted mb-0">Search, filter, and explore all products in the supply chain</p>
+        </div>
+        <div class="mt-3 mt-md-0">
+            <div class="d-inline-flex align-items-center px-3 py-2 rounded-3 date-badge">
+                <i class="bi bi-box-seam me-2" style="color: var(--primary-color);"></i>
+                <span class="fw-medium text-muted small" id="product-count-badge">{{ products|length }} Products</span>
+            </div>
+        </div>
     </div>
 
     <!-- Search Form -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form method="GET" action="{% url 'product-list' %}" class="d-flex search-form">
-                <input class="form-control me-2" type="search" placeholder="Search by Product Name, SKU, or Description..." name="q" value="{{ search_query }}">
-                <button class="btn btn-primary" type="submit">Search</button>
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body p-2">
+            <form method="GET" action="{% url 'product-list' %}" class="d-flex search-form gap-2">
+                <input class="form-control border-0 bg-transparent" type="search"
+                    placeholder="Search by Product Name, SKU, or Description..." name="q" value="{{ search_query }}">
+                <button class="btn btn-primary px-4" type="submit">Search</button>
             </form>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table align-middle table-hover">
+                <table class="table align-middle">
                     <thead>
                         <tr>
                             <th>SKU</th>
@@ -109,19 +137,27 @@
                     </thead>
                     <tbody>
                         {% for product in products %}
-                            <tr>
-                                <td><code>{{ product.sku }}</code></td>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.supplier.name }}</td>
-                                <td>{{ product.description|truncatewords:15 }}</td>
-                            </tr>
+                        <tr>
+                            <td><code class="text-primary fw-bold">{{ product.sku }}</code></td>
+                            <td class="fw-medium">{{ product.name }}</td>
+                            <td>
+                                <span class="badge bg-light text-dark border">
+                                    {{ product.supplier.name }}
+                                </span>
+                            </td>
+                            <td class="text-muted small">{{ product.description|truncatewords:15 }}</td>
+                        </tr>
                         {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-5">
-                                    <h4>No Products Found</h4>
-                                    <p class="text-secondary">Your search for "{{ search_query }}" did not match any products.</p>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <div class="py-4">
+                                    <i class="bi bi-search fs-1 text-muted opacity-50 mb-3 d-block"></i>
+                                    <h4 class="h5">No Products Found</h4>
+                                    <p class="text-muted small">Your search for "{{ search_query }}" did not match any
+                                        products.</p>
+                                </div>
+                            </td>
+                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
