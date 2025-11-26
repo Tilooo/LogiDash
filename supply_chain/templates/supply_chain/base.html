@@ -237,10 +237,24 @@
             box-shadow: var(--shadow-sm);
             border-radius: 1rem;
         }
+
+#dashboard-page .nav-link[href="{% url 'dashboard' %}"],
+#products-page .nav-link[href="{% url 'product-list' %}"],
+#upload-page .nav-link[href="{% url 'upload-data' %}"],
+ {
+    color: var(--nav-link-hover) !important;
+}
+
+#dashboard-page .nav-link[href="{% url 'dashboard' %}"]::after,
+#products-page .nav-link[href="{% url 'product-list' %}"]::after,
+#upload-page .nav-link[href="{% url 'upload-data' %}"]::after {
+    width: 100%;
+}
     </style>
 </head>
 
-<body>
+<body id="{% block page_id %}{% endblock %}">
+
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg fixed-top">

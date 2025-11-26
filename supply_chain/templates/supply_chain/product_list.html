@@ -4,51 +4,25 @@
     Product List - LogiDash
 {% endblock %}
 
+{% block page_id %}products-page{% endblock %}
+
 {% block content %}
 
 <style>
+    /* Styles */
     :root {
-        --bg-gradient: linear-gradient(135deg, #f0f4f8, #e0ebff);
-        --text-color: #1a237e;
-        --card-bg: #ffffff;
-        --shadow-color: rgba(0,0,0,0.1);
-        --table-header-bg: #1f2937;
-        --table-header-text: #ffffff;
-        --table-hover-bg: rgba(0,0,0,0.05);
-        --input-bg: #ffffff;
-        --input-border: #ced4da;
+        --input-bg-light: #ffffff;
+        --input-border-light: #ced4da;
+        --input-bg-dark: #2c2c2c;
+        --input-border-dark: #444;
     }
-
-    [data-theme="dark"] {
-        --bg-gradient: linear-gradient(135deg, #111827, #1e293b);
-        --text-color: #e2e8f0;
-        --card-bg: #1f2937;
-        --shadow-color: rgba(0,0,0,0.6);
-        --table-header-bg: #0f172a;
-        --table-header-text: #e2e8f0;
-        --table-hover-bg: rgba(255,255,255,0.05);
-        --input-bg: #2c2c2c;
-        --input-border: #444;
-    }
-
     body {
-        background: var(--bg-gradient);
-        font-family: 'Poppins', sans-serif;
-        color: var(--text-color);
-        transition: background 0.4s ease, color 0.4s ease;
+        --input-bg: var(--input-bg-light);
+        --input-border: var(--input-border-light);
     }
-
-    h1.display-5 {
-        color: var(--text-color);
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
-    }
-
-    .card {
-        border: none;
-        border-radius: 1rem;
-        background: var(--card-bg);
-        box-shadow: 0 4px 12px var(--shadow-color);
-        transition: all 0.3s ease;
+    [data-theme="dark"] body {
+        --input-bg: var(--input-bg-dark);
+        --input-border: var(--input-border-dark);
     }
 
     .fade-in {
@@ -61,12 +35,7 @@
     }
 
     /* Table styling */
-    .table {
-        color: var(--text-color);
-    }
-
     .table thead {
-        background-color: transparent !important;
         border-bottom: 2px solid var(--text-color);
     }
 
@@ -76,14 +45,9 @@
     }
 
     .table tbody tr:hover {
-        background-color: var(--table-hover-bg) !important;
         transform: scale(1.01);
         transition: transform 0.2s ease, background-color 0.2s ease;
-        box-shadow: 0 4px 12px var(--shadow-color);
-    }
-
-    .table-responsive {
-        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px var(--shadow-sm);
     }
 
     /* Search Form Styling */
@@ -100,15 +64,17 @@
     .search-form .form-control:focus {
         background-color: var(--input-bg);
         color: var(--text-color);
-        border-color: #80bdff;
-        box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, .25);
     }
     .search-form .btn-primary {
-        background: linear-gradient(135deg, #1aeb51, #645c96);
+        background-color: var(--primary-color);
         border: none;
         border-radius: 0.5rem;
     }
-
+     .search-form .btn-primary:hover {
+        background-color: var(--primary-hover);
+    }
 </style>
 
 <div class="container-fluid px-4 py-5 fade-in">
@@ -127,7 +93,7 @@
                 <button class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
-    </div>    <!-- end search form -->
+    </div>
 
     <div class="card shadow-sm">
         <div class="card-body">
