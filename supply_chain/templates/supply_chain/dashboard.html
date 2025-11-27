@@ -42,7 +42,7 @@ LogiDash - Dashboard
     }
 
     .bg-gradient-warning {
-        background: linear-gradient(135deg, #2c8701, #a855f7);
+        background: linear-gradient(135deg, #d946ef, #a855f7);
         color: white;
     }
 
@@ -117,30 +117,80 @@ LogiDash - Dashboard
         </div>
     </div>
 
-    <div class="row g-4 mb-5">
-        <div class="col-md-6 fade-in" style="animation-delay: 0.1s;">
-            <div class="card stat-card bg-gradient-primary h-100 p-4">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h5 class="card-title text-uppercase mb-2">Total Unique Products</h5>
-                        <p class="card-text counter" data-target="{{ product_count }}">0</p>
+    <div class="row g-3 mb-4">
+        <!-- Products Card -->
+        <div class="col-md-3 col-sm-6 fade-in" style="animation-delay: 0.1s;">
+            <div class="card stat-card bg-gradient-primary h-100">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <p class="card-title text-uppercase mb-1 small">Products</p>
+                            <h3 class="counter mb-0" data-target="{{ product_count }}" style="font-size: 1.75rem;">0
+                            </h3>
+                        </div>
+                        <i class="bi bi-box-seam fs-3 opacity-50"></i>
                     </div>
-                    <div class="mt-3">
-                        <i class="bi bi-box-seam fs-1 opacity-50"></i>
+                    <a href="{% url 'product-list' %}" class="btn btn-sm btn-light btn-opacity-25 mt-2 w-100">
+                        <i class="bi bi-arrow-right-circle me-1"></i> View All
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suppliers Card -->
+        <div class="col-md-3 col-sm-6 fade-in" style="animation-delay: 0.2s;">
+            <div class="card stat-card bg-gradient-warning h-100">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <p class="card-title text-uppercase mb-1 small">Suppliers</p>
+                            <h3 class="counter mb-0" data-target="{{ supplier_count }}" style="font-size: 1.75rem;">0
+                            </h3>
+                        </div>
+                        <i class="bi bi-truck fs-3 opacity-50"></i>
+                    </div>
+                    <div class="mt-2">
+                        <small class="opacity-75">Active partnerships</small>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 fade-in" style="animation-delay: 0.2s;">
-            <div class="card stat-card bg-gradient-warning h-100 p-4">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <h5 class="card-title text-uppercase mb-2">Total Suppliers</h5>
-                        <p class="card-text counter" data-target="{{ supplier_count }}">0</p>
+
+        <!-- Categories Card -->
+        <div class="col-md-3 col-sm-6 fade-in" style="animation-delay: 0.3s;">
+            <div class="card stat-card h-100"
+                style="background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white;">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <p class="card-title text-uppercase mb-1 small">Categories</p>
+                            <h3 class="counter mb-0" data-target="{{ category_count }}" style="font-size: 1.75rem;">0
+                            </h3>
+                        </div>
+                        <i class="bi bi-grid-3x3-gap fs-3 opacity-50"></i>
                     </div>
-                    <div class="mt-3">
-                        <i class="bi bi-truck fs-1 opacity-50"></i>
+                    <div class="mt-2">
+                        <small class="opacity-75">Product types</small>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Data Card -->
+        <div class="col-md-3 col-sm-6 fade-in" style="animation-delay: 0.4s;">
+            <div class="card stat-card h-100"
+                style="background: linear-gradient(135deg, #d946ef, #ec4899); color: white;">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                            <p class="card-title text-uppercase mb-1 small">Quick Action</p>
+                            <h6 class="mb-0" style="font-size: 0.9rem;">Upload Data</h6>
+                        </div>
+                        <i class="bi bi-cloud-upload fs-3 opacity-50"></i>
+                    </div>
+                    <a href="{% url 'upload-data' %}" class="btn btn-sm btn-light btn-opacity-25 mt-2 w-100">
+                        <i class="bi bi-upload me-1"></i> Upload CSV
+                    </a>
                 </div>
             </div>
         </div>
