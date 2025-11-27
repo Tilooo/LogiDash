@@ -18,10 +18,17 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-    {% load static %}
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
-    <!-- Animated Background CSS -->
-    <link rel="stylesheet" href="{% static 'supply_chain/css/animated-background.css' %}">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+    {% load static %}
 
     <style>
         :root {
@@ -33,9 +40,12 @@
             --navbar-bg: rgba(255, 255, 255, 0.85);
             --navbar-border: rgba(226, 232, 240, 0.8);
             --primary-color: #4f46e5;
-            --primary-hover: #4338ca;  /* Indigo 600 */
-            --accent-color: #8b5cf6;   /* Indigo 700 */
-            --nav-link-color: #64748b;  /* Violet 500 */
+            /* Indigo 600 */
+            --primary-hover: #4338ca;
+            /* Indigo 700 */
+            --accent-color: #8b5cf6;
+            /* Violet 500 */
+            --nav-link-color: #64748b;
             --nav-link-hover: #4f46e5;
             --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.1);
@@ -54,8 +64,11 @@
             --navbar-bg: rgba(15, 23, 42, 0.85);
             --navbar-border: rgba(30, 41, 59, 0.8);
             --primary-color: #6366f1;
+            /* Indigo 500 */
             --primary-hover: #818cf8;
-            --accent-color: #2c8701;
+            /* Indigo 400 */
+            --accent-color: #a78bfa;
+            /* Violet 400 */
             --nav-link-color: #94a3b8;
             --nav-link-hover: #f8fafc;
             --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.5);

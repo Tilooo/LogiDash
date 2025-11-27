@@ -30,6 +30,7 @@ Product List - LogiDash
         padding: 1rem;
         border-bottom: 1px solid var(--navbar-border);
         color: var(--text-color);
+        vertical-align: middle;
     }
 
     .table tbody tr {
@@ -42,27 +43,6 @@ Product List - LogiDash
 
     [data-theme="dark"] .table tbody tr:hover {
         background-color: rgba(255, 255, 255, 0.02);
-    }
-
-    /* Search Form Styling */
-    .search-form .form-control {
-        background-color: var(--bg-color);
-        border: 1px solid var(--navbar-border);
-        color: var(--text-color) !important;
-        border-radius: 0.75rem;
-        padding: 0.75rem 1rem;
-    }
-
-    .search-form .form-control::placeholder {
-        color: var(--text-color);
-        opacity: 0.6;
-    }
-
-    .search-form .form-control:focus {
-        background-color: var(--bg-color);
-        color: var(--text-color) !important;
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
     }
 
     .fade-in {
@@ -93,6 +73,75 @@ Product List - LogiDash
         border: 1px solid var(--navbar-border);
         box-shadow: var(--shadow-sm);
     }
+
+    /* DataTables Custom Styling */
+    .dataTables_wrapper .dataTables_length select {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        border: 1px solid var(--navbar-border);
+        border-radius: 0.5rem;
+        padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        border: 1px solid var(--navbar-border);
+        border-radius: 0.5rem;
+        padding: 0.375rem 0.75rem;
+        margin-left: 0.5rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input::placeholder {
+        color: var(--text-color);
+        opacity: 0.6;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus,
+    .dataTables_wrapper .dataTables_length select:focus {
+        border-color: var(--primary-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    /* Fix for invisible labels in dark mode */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        color: var(--text-color) !important;
+    }
+
+    .dataTables_wrapper .dataTables_info {
+        color: var(--text-muted) !important;
+        padding-top: 1rem;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+        padding-top: 1rem;
+    }
+
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        border-color: transparent;
+        color: white;
+    }
+
+    .page-link {
+        color: var(--primary-color);
+        background-color: var(--card-bg);
+        border-color: var(--navbar-border);
+    }
+
+    .page-link:hover {
+        color: var(--primary-hover);
+        background-color: var(--bg-color);
+        border-color: var(--navbar-border);
+    }
+
+    .page-item.disabled .page-link {
+        color: var(--text-muted);
+        background-color: var(--bg-color);
+        border-color: var(--navbar-border);
+    }
 </style>
 
 <div class="container-fluid px-0 py-5 fade-in">
@@ -112,21 +161,10 @@ Product List - LogiDash
         </div>
     </div>
 
-    <!-- Search Form -->
-    <div class="card mb-4 border-0 shadow-sm">
-        <div class="card-body p-2">
-            <form method="GET" action="{% url 'product-list' %}" class="d-flex search-form gap-2">
-                <input class="form-control border-0 bg-transparent" type="search"
-                    placeholder="Search by Product Name, SKU, or Description..." name="q" value="{{ search_query }}">
-                <button class="btn btn-primary px-4" type="submit">Search</button>
-            </form>
-        </div>
-    </div>
-
     <div class="card border-0 shadow-sm overflow-hidden">
-        <div class="card-body p-0">
+        <div class="card-body p-4">
             <div class="table-responsive">
-                <table class="table align-middle">
+                <table id="productsTable" class="table align-middle w-100">
                     <thead>
                         <tr>
                             <th>SKU</th>
@@ -147,17 +185,6 @@ Product List - LogiDash
                             </td>
                             <td class="text-muted small">{{ product.description|truncatewords:15 }}</td>
                         </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center py-5">
-                                <div class="py-4">
-                                    <i class="bi bi-search fs-1 text-muted opacity-50 mb-3 d-block"></i>
-                                    <h4 class="h5">No Products Found</h4>
-                                    <p class="text-muted small">Your search for "{{ search_query }}" did not match any
-                                        products.</p>
-                                </div>
-                            </td>
-                        </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -165,5 +192,29 @@ Product List - LogiDash
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#productsTable').DataTable({
+            "pageLength": 10,
+            "language": {
+                "search": "_INPUT_",
+                "searchPlaceholder": "Search products...",
+                "lengthMenu": "Show _MENU_ entries",
+                "info": "Showing _START_ to _END_ of _TOTAL_ products",
+                "paginate": {
+                    "first": '<i class="bi bi-chevron-double-left"></i>',
+                    "last": '<i class="bi bi-chevron-double-right"></i>',
+                    "next": '<i class="bi bi-chevron-right"></i>',
+                    "previous": '<i class="bi bi-chevron-left"></i>'
+                }
+            },
+            "dom": '<"d-flex justify-content-between align-items-center mb-4"lf>rt<"d-flex justify-content-between align-items-center mt-4"ip>',
+            "drawCallback": function () {
+                $('.dataTables_paginate > .pagination').addClass('pagination-sm');
+            }
+        });
+    });
+</script>
 
 {% endblock %}
