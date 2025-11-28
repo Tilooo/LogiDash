@@ -335,13 +335,15 @@
         /* Active State Logic */
         #dashboard-page .nav-link[href="{% url 'dashboard' %}"],
         #products-page .nav-link[href="{% url 'product-list' %}"],
-        #upload-page .nav-link[href="{% url 'upload-data' %}"] {
+        #upload-page .nav-link[href="{% url 'upload-data' %}"],
+        #forecast-page .nav-link[href="{% url 'forecast' %}"] {
             color: var(--primary-color) !important;
         }
 
         #dashboard-page .nav-link[href="{% url 'dashboard' %}"]::after,
         #products-page .nav-link[href="{% url 'product-list' %}"]::after,
-        #upload-page .nav-link[href="{% url 'upload-data' %}"]::after {
+        #upload-page .nav-link[href="{% url 'upload-data' %}"]::after,
+        #forecast-page .nav-link[href="{% url 'forecast' %}"]::after {
             width: 100%;
         }
     </style>
@@ -382,6 +384,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'upload-data' %}">
                             <i class="bi bi-cloud-upload"></i> Upload Data
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'forecast' %}">
+                            <i class="bi bi-graph-up-arrow"></i> Forecast
                         </a>
                     </li>
                 </ul>
