@@ -6,4 +6,5 @@ urlpatterns = [
     path('products/', views.product_list_view, name='product-list'),
     path('upload/', views.upload_data_view, name='upload-data'),
     path('forecast/', views.forecast_view, name='forecast'),
+    path('map/', views.map_view, name='map'),
 ]
