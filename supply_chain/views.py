@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 from prophet import Prophet
 import plotly.graph_objs as go
+import folium
 
 def dashboard_view(request):
     product_count = Product.objects.count()
@@ -161,3 +162,38 @@ def forecast_view(request):
     }
     
     return render(request, 'supply_chain/forecast.html', context)
+
+
+
+def map_view(request):
+    suppliers = Supplier.objects.all()
+
+    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4)
+    
+    # Mock coordinates for demonstration purposes
+    mock_coordinates = {
+        0: [40.7128, -74.0060], # New York
+        1: [34.0522, -118.2437], # Los Angeles
+        2: [41.8781, -87.6298], # Chicago
+        3: [29.7604, -95.3698], # Houston
+        4: [33.4484, -112.0740], # Phoenix
+    }
+
+    for i, supplier in enumerate(suppliers):
+        coords = mock_coordinates.get(i % len(mock_coordinates))
+        
+        folium.Marker(
+            coords,
+            popup=f"<b>{supplier.name}</b><br>{supplier.address}",
+            tooltip=supplier.name,
+            icon=folium.Icon(color='blue', icon='info-sign')
+        ).add_to(m)
+
+    # HTML representation of the map
+    map_html = m._repr_html_()
+
+    context = {
+        'map_html': map_html
+    }
+
+    return render(request, 'supply_chain/map.html', context)

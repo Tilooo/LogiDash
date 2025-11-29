@@ -336,14 +336,16 @@
         #dashboard-page .nav-link[href="{% url 'dashboard' %}"],
         #products-page .nav-link[href="{% url 'product-list' %}"],
         #upload-page .nav-link[href="{% url 'upload-data' %}"],
-        #forecast-page .nav-link[href="{% url 'forecast' %}"] {
+        #forecast-page .nav-link[href="{% url 'forecast' %}"],
+        #map-page .nav-link[href="{% url 'map' %}"] {
             color: var(--primary-color) !important;
         }
 
         #dashboard-page .nav-link[href="{% url 'dashboard' %}"]::after,
         #products-page .nav-link[href="{% url 'product-list' %}"]::after,
         #upload-page .nav-link[href="{% url 'upload-data' %}"]::after,
-        #forecast-page .nav-link[href="{% url 'forecast' %}"]::after {
+        #forecast-page .nav-link[href="{% url 'forecast' %}"]::after,
+        #map-page .nav-link[href="{% url 'map' %}"]::after {
             width: 100%;
         }
     </style>
@@ -389,6 +391,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'forecast' %}">
                             <i class="bi bi-graph-up-arrow"></i> Forecast
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'map' %}">
+                            <i class="bi bi-map"></i> Map
                         </a>
                     </li>
                 </ul>
