@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en" data-theme="light">
 
@@ -28,8 +29,6 @@
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-    {% load static %}
-
     <style>
         :root {
             /* Light Theme Variables */
@@ -53,6 +52,12 @@
             --border-radius: 1rem;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --text-muted: #64748b;
+
+            /* Glassmorphism Variables (Light) */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --glass-blur: blur(12px);
         }
 
         [data-theme="dark"] {
@@ -75,6 +80,11 @@
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
             --text-muted: #94a3b8;
+
+            /* Glassmorphism Variables (Dark) */
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
         body {
@@ -96,6 +106,15 @@
             color: var(--heading-color);
             font-weight: 700;
             letter-spacing: -0.025em;
+        }
+
+        /* Glassmorphism Utility Class */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: var(--glass-shadow) !important;
         }
 
         /* Global Overrides */
@@ -323,36 +342,19 @@
         .btn-primary {
             background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
             border: none;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+            color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
-            transform: translateY(-1px);
-            box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
-        }
-
-        /* Active State Logic */
-        #dashboard-page .nav-link[href="{% url 'dashboard' %}"],
-        #products-page .nav-link[href="{% url 'product-list' %}"],
-        #upload-page .nav-link[href="{% url 'upload-data' %}"],
-        #forecast-page .nav-link[href="{% url 'forecast' %}"],
-        #map-page .nav-link[href="{% url 'map' %}"] {
-            color: var(--primary-color) !important;
-        }
-
-        #dashboard-page .nav-link[href="{% url 'dashboard' %}"]::after,
-        #products-page .nav-link[href="{% url 'product-list' %}"]::after,
-        #upload-page .nav-link[href="{% url 'upload-data' %}"]::after,
-        #forecast-page .nav-link[href="{% url 'forecast' %}"]::after,
-        #map-page .nav-link[href="{% url 'map' %}"]::after {
-            width: 100%;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
     </style>
+
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body id="{% block page_id %}{% endblock %}">
-
 
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg fixed-top">
@@ -369,145 +371,109 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navbar Content -->
+            <!-- Navigation Links -->
             <div class="collapse navbar-collapse" id="navbarContent">
-                <!-- Removed me-auto to allow CSS margin-left: auto to work -->
-                <ul class="navbar-nav mb-2 mb-lg-0">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'dashboard' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                            href="{% url 'dashboard' %}">
                             <i class="bi bi-speedometer2"></i> Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'product-list' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'product-list' %}active{% endif %}"
+                            href="{% url 'product-list' %}">
                             <i class="bi bi-box-seam"></i> Products
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'upload-data' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'upload-data' %}active{% endif %}"
+                            href="{% url 'upload-data' %}">
                             <i class="bi bi-cloud-upload"></i> Upload Data
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'forecast' %}">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'forecast' %}active{% endif %}"
+                            href="{% url 'forecast' %}">
                             <i class="bi bi-graph-up-arrow"></i> Forecast
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'map' %}">
-                            <i class="bi bi-map"></i> Map
+                        <a class="nav-link {% if request.resolver_match.url_name == 'map' %}active{% endif %}"
+                            href="{% url 'map' %}">
+                            <i class="bi bi-geo-alt"></i> Map
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
+                            <i class="bi bi-moon-stars-fill"></i>
+                        </button>
+                    </li>
                 </ul>
-
-                <!-- Right Side: Theme Toggle -->
-                <div class="d-flex align-items-center">
-                    <button id="theme-toggle" class="theme-toggle-btn" title="Toggle Theme">
-                        <i id="theme-icon" class="bi bi-moon-fill"></i>
-                    </button>
-                </div>
             </div>
-
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
+    <div class="container-fluid">
+        {% block content %}
+        {% endblock %}
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- THEME SCRIPT -->
-    <script>
-        const root = document.documentElement;
-        const toggleBtn = document.getElementById("theme-toggle");
-        const icon = document.getElementById("theme-icon");
-
-        const getPreferredTheme = () => {
-            const savedTheme = localStorage.getItem("theme");
-            if (savedTheme) {
-                return savedTheme;
-            }
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        };
-
-        const setTheme = (theme) => {
-            root.setAttribute("data-theme", theme);
-            localStorage.setItem("theme", theme);
-            icon.className = theme === "dark" ? "bi bi-sun-fill" : "bi bi-moon-fill";
-        };
-
-        setTheme(getPreferredTheme());
-
-        // Toggle Event
-        toggleBtn.addEventListener("click", () => {
-            const currentTheme = root.getAttribute("data-theme");
-            const newTheme = currentTheme === "dark" ? "light" : "dark";
-            setTheme(newTheme);
-        });
-    </script>
-
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Theme Toggle Script -->
     <script>
-        // SweetAlert2 Toast Configuration
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('i');
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcon(newTheme);
         });
 
-        // Display Django Messages
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-stars-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-stars-fill');
+            }
+        }
+    </script>
+
+    <!-- Django Messages with SweetAlert2 -->
+    <script>
         {% if messages %}
         {% for message in messages %}
-        {% if message.tags == 'success' %}
         Swal.fire({
-            title: 'Success!',
-            text: "{{ message }}",
-            icon: 'success',
-            confirmButtonText: 'Great!',
+            icon: '{{ message.tags }}' === 'success' ? 'success' : '{{ message.tags }}' === 'error' ? 'error' : 'info',
+            title: '{{ message.tags|title }}',
+            text: '{{ message }}',
             confirmButtonColor: '#4f46e5',
-            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
-            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
+            timer: 3000,
+            timerProgressBar: true
         });
-        {% elif message.tags == 'error' %}
-        Swal.fire({
-            title: 'Error!',
-            text: "{{ message }}",
-            icon: 'error',
-            confirmButtonText: 'Okay',
-            confirmButtonColor: '#ef4444',
-            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
-            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
-        });
-        {% elif message.tags == 'warning' %}
-        Swal.fire({
-            title: 'Warning!',
-            text: "{{ message }}",
-            icon: 'warning',
-            confirmButtonText: 'Understood',
-            confirmButtonColor: '#f59e0b',
-            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
-            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
-        });
-        {% else %}
-        Toast.fire({
-            icon: 'info',
-            title: "{{ message }}"
-        });
-        {% endif %}
         {% endfor %}
         {% endif %}
     </script>
+
+    {% block extra_js %}{% endblock %}
 </body>
 
 </html>
