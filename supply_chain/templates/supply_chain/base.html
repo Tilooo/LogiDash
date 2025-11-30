@@ -449,6 +449,65 @@
         });
     </script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // SweetAlert2 Toast Configuration
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        // Display Django Messages
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'success' %}
+        Swal.fire({
+            title: 'Success!',
+            text: "{{ message }}",
+            icon: 'success',
+            confirmButtonText: 'Great!',
+            confirmButtonColor: '#4f46e5',
+            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
+            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
+        });
+        {% elif message.tags == 'error' %}
+        Swal.fire({
+            title: 'Error!',
+            text: "{{ message }}",
+            icon: 'error',
+            confirmButtonText: 'Okay',
+            confirmButtonColor: '#ef4444',
+            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
+            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
+        });
+        {% elif message.tags == 'warning' %}
+        Swal.fire({
+            title: 'Warning!',
+            text: "{{ message }}",
+            icon: 'warning',
+            confirmButtonText: 'Understood',
+            confirmButtonColor: '#f59e0b',
+            background: document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e293b' : '#ffffff',
+            color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#0f172a',
+        });
+        {% else %}
+        Toast.fire({
+            icon: 'info',
+            title: "{{ message }}"
+        });
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </script>
 </body>
 
 </html>

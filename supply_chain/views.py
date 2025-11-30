@@ -12,6 +12,7 @@ from django.conf import settings
 from prophet import Prophet
 import plotly.graph_objs as go
 import folium
+from django.contrib import messages
 
 def dashboard_view(request):
     product_count = Product.objects.count()
@@ -96,7 +97,9 @@ def upload_data_view(request):
 
         try:
             call_command('import_data')
+            messages.success(request, "Upload Complete! Your data has been successfully processed.")
         except Exception as e:
+            messages.error(request, f"Error during import: {str(e)}")
             print(f"Error during import: {e}")
 
         return redirect('product-list')
