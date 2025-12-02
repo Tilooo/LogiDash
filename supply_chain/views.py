@@ -200,3 +200,129 @@ def map_view(request):
     }
 
     return render(request, 'supply_chain/map.html', context)
+
+
+def supplier_analytics_view(request):  # Supplier Performance Analytics with scorecards and charts
+    suppliers = Supplier.objects.all()
+    
+    if not suppliers.exists():
+        context = {
+            'no_data': True,
+            'top_chart_html': "<p class='text-center text-muted'>No supplier data available</p>",
+            'bottom_chart_html': "<p class='text-center text-muted'>No supplier data available</p>",
+            'supplier_scores': []
+        }
+        return render(request, 'supply_chain/supplier_analytics.html', context)
+    
+    # Calculate performance metrics for each supplier
+    supplier_data = []
+    
+    for supplier in suppliers:
+        orders = Order.objects.filter(product__supplier=supplier)
+        order_count = orders.count()
+        
+        # Calculate reliability score (0-100), based on order volume and consistency
+        if order_count > 0:
+            orders_with_dates = orders.values('order_date')
+            if orders_with_dates:
+                df_orders = pd.DataFrame(list(orders_with_dates))
+                df_orders['order_date'] = pd.to_datetime(df_orders['order_date']).dt.tz_localize(None)
+                
+                date_range = (df_orders['order_date'].max() - df_orders['order_date'].min()).days
+                active_days = max(date_range, 1)
+                
+                # Calculate average orders per day
+                avg_orders_per_day = order_count / active_days
+                
+                # Reliability score: combination of volume and consistency
+                # Higher order count and consistent delivery = higher score
+                volume_score = min(order_count / 10, 50)  # Max 50 points for volume
+                consistency_score = min(avg_orders_per_day * 100, 50)  # Max 50 points for consistency
+                reliability_score = min(volume_score + consistency_score, 100)
+            else:
+                reliability_score = 0
+        else:
+            reliability_score = 0
+            avg_orders_per_day = 0
+        
+        supplier_data.append({
+            'name': supplier.name,
+            'order_count': order_count,
+            'reliability_score': round(reliability_score, 1),
+            'avg_orders_per_day': round(avg_orders_per_day, 2)
+        })
+    
+    # By order count
+    supplier_data.sort(key=lambda x: x['order_count'], reverse=True)
+    
+    # Top 5 and bottom 5
+    top_5 = supplier_data[:5]
+    bottom_5 = supplier_data[-5:] if len(supplier_data) > 5 else []
+    
+    # Bar chart for top 5 suppliers
+    if top_5:
+        df_top = pd.DataFrame(top_5)
+        fig_top = px.bar(
+            df_top,
+            x='name',
+            y='order_count',
+            title='Top 5 Suppliers by Order Volume',
+            labels={'name': 'Supplier', 'order_count': 'Total Orders'},
+            color='reliability_score',
+            color_continuous_scale=['#ef4444', '#eab308', '#22c55e'],  # Red to Yellow to Green
+            text='order_count'
+        )
+        
+        fig_top.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#eaeaea"),
+            title_x=0.5,
+            xaxis_title='Supplier',
+            yaxis_title='Total Orders',
+            coloraxis_colorbar=dict(title="Reliability<br>Score")
+        )
+        fig_top.update_traces(textposition='outside')
+        
+        top_chart_html = fig_top.to_html(full_html=False, include_plotlyjs='cdn')
+    else:
+        top_chart_html = "<p class='text-center text-muted'>No data available</p>"
+    
+    # Bar chart for bottom 5 suppliers
+    if bottom_5:
+        df_bottom = pd.DataFrame(bottom_5)
+        fig_bottom = px.bar(
+            df_bottom,
+            x='name',
+            y='order_count',
+            title='Bottom 5 Suppliers by Order Volume',
+            labels={'name': 'Supplier', 'order_count': 'Total Orders'},
+            color='reliability_score',
+            color_continuous_scale=['#ef4444', '#eab308', '#22c55e'],  # Red to Yellow to Green
+            text='order_count'
+        )
+        
+        fig_bottom.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#eaeaea"),
+            title_x=0.5,
+            xaxis_title='Supplier',
+            yaxis_title='Total Orders',
+            coloraxis_colorbar=dict(title="Reliability<br>Score")
+        )
+        fig_bottom.update_traces(textposition='outside')
+        
+        bottom_chart_html = fig_bottom.to_html(full_html=False, include_plotlyjs='cdn')
+    else:
+        bottom_chart_html = "<p class='text-center text-muted'>Not enough suppliers for comparison</p>"
+    
+    context = {
+        'no_data': False,
+        'top_chart_html': top_chart_html,
+        'bottom_chart_html': bottom_chart_html,
+        'supplier_scores': supplier_data,
+        'total_suppliers': len(supplier_data)
+    }
+    
+    return render(request, 'supply_chain/supplier_analytics.html', context)

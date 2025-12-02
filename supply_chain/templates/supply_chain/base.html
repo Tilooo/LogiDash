@@ -491,6 +491,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'supplier-analytics' %}active{% endif %}"
+                            href="{% url 'supplier-analytics' %}">
+                            <i class="bi bi-bar-chart-fill"></i> Suppliers
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
                             <i class="bi bi-moon-stars-fill"></i>
                         </button>

@@ -7,4 +7,5 @@ urlpatterns = [
     path('upload/', views.upload_data_view, name='upload-data'),
     path('forecast/', views.forecast_view, name='forecast'),
     path('map/', views.map_view, name='map'),
+    path('suppliers/', views.supplier_analytics_view, name='supplier-analytics'),
 ]
