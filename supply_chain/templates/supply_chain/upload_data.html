@@ -18,7 +18,7 @@ Upload Data - LogiDash
     .drop-zone {
         border: 2px dashed var(--navbar-border);
         border-radius: 1.5rem;
-        padding: 3rem 2rem;
+        padding: 1rem 0.5rem;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -44,8 +44,8 @@ Upload Data - LogiDash
     }
 
     .icon-circle {
-        width: 80px;
-        height: 80px;
+        width: 70px;
+        height: 70px;
         background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         border-radius: 50%;
         display: flex;
@@ -89,15 +89,15 @@ Upload Data - LogiDash
 <div class="container-fluid px-0 py-5 fade-in">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-5">
         <div>
-            <h1 class="fw-bold mb-2" style="font-size: 2.5rem; letter-spacing: -0.02em; color: var(--heading-color);">
+            <h1 class="fw-bold mb-2" style="font-size: 2.0rem; letter-spacing: -0.02em; color: var(--heading-color);">
                 Upload <span class="gradient-text">Data</span>
             </h1>
-            <p class="text-muted mb-0">Upload a CSV file to update the supply chain database</p>
+            <p class="text-muted mb-0">Upload CSV, Excel, or JSON files to update the supply chain database</p>
         </div>
         <div class="mt-3 mt-md-0">
             <div class="d-inline-flex align-items-center px-3 py-2 rounded-3 date-badge">
                 <i class="bi bi-cloud-arrow-up me-2" style="color: var(--primary-color);"></i>
-                <span class="fw-medium text-muted small">CSV Import</span>
+                <span class="fw-medium text-muted small">Multi-Format Import</span>
             </div>
         </div>
     </div>
@@ -114,10 +114,13 @@ Upload Data - LogiDash
                         <h4 class="fw-bold mb-2">Drag & Drop file here</h4>
                         <p class="text-muted mb-0">or click to browse from your computer</p>
                         <div class="mt-3">
-                            <span class="badge bg-light text-secondary border">Accepts .csv files</span>
+                            <span class="badge bg-light text-secondary border me-1">CSV</span>
+                            <span class="badge bg-light text-secondary border me-1">Excel</span>
+                            <span class="badge bg-light text-secondary border">JSON</span>
                         </div>
                     </div>
-                    <input type="file" name="csv_file" class="drop-zone__input" accept=".csv" required>
+                    <input type="file" name="data_file" class="drop-zone__input" accept=".csv,.xlsx,.xls,.json"
+                        required>
                 </div>
                 <div class="d-grid gap-2 mt-4">
                     <button type="submit" class="btn btn-primary btn-lg py-3">

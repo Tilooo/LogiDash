@@ -88,11 +88,23 @@ def product_list_view(request):
 
 
 def upload_data_view(request):
-    if request.method == 'POST' and request.FILES.get('csv_file'):
-        uploaded_file = request.FILES['csv_file']
+    if request.method == 'POST' and request.FILES.get('data_file'):
+        uploaded_file = request.FILES['data_file']
+        
+        # Get file extension
+        file_name = uploaded_file.name
+        file_extension = os.path.splitext(file_name)[1].lower()
+        
+        # Validate file type
+        allowed_extensions = ['.csv', '.xlsx', '.xls', '.json']
+        if file_extension not in allowed_extensions:
+            messages.error(request, f"Unsupported file type. Please upload CSV, Excel, or JSON files.")
+            return redirect('upload-data')
 
         fs = FileSystemStorage()
-        temp_file_name = 'DataCoSupplyChainDataset.csv'
+        temp_file_name = f'DataCoSupplyChainDataset{file_extension}'
+        
+        # Delete existing file if it exists
         if fs.exists(temp_file_name):
             fs.delete(temp_file_name)
 

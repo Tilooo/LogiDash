@@ -2,14 +2,46 @@ import pandas as pd
 from django.core.management.base import BaseCommand
 from supply_chain.models import Supplier, Product, Order
 from datetime import datetime
+import os
+import glob
 
 
 class Command(BaseCommand):
-    help = 'Import data from a CSV file into the database'
+    help = 'Import data from CSV, Excel, or JSON file into the database'
 
     def handle(self, *args, **kwargs):
-        csv_file_path = 'data/DataCoSupplyChainDataset.csv'
-        df = pd.read_csv(csv_file_path, encoding='latin1')
+        data_dir = 'data'  # data file with any supported extension
+        supported_extensions = ['*.csv', '*.xlsx', '*.xls', '*.json']
+        
+        data_file_path = None
+        for ext in supported_extensions:
+            pattern = os.path.join(data_dir, f'DataCoSupplyChainDataset{ext[1:]}')
+            matches = glob.glob(pattern)
+            if matches:
+                data_file_path = matches[0]
+                break
+        
+        if not data_file_path:
+            self.stdout.write(self.style.ERROR("No data file found. Please upload a CSV, Excel, or JSON file."))
+            return
+
+        file_extension = os.path.splitext(data_file_path)[1].lower()  # detect file extension and read accordingly
+        
+        self.stdout.write(f"Reading {file_extension} file: {data_file_path}")
+        
+        try:
+            if file_extension == '.csv':
+                df = pd.read_csv(data_file_path, encoding='latin1')
+            elif file_extension in ['.xlsx', '.xls']:
+                df = pd.read_excel(data_file_path, engine='openpyxl' if file_extension == '.xlsx' else None)
+            elif file_extension == '.json':
+                df = pd.read_json(data_file_path)
+            else:
+                self.stdout.write(self.style.ERROR(f"Unsupported file format: {file_extension}"))
+                return
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f"Error reading file: {e}"))
+            return
 
         # old data cleared before importing to prevent create duplicate orders after the scrip run
         self.stdout.write("Clearing old data from the database...")
