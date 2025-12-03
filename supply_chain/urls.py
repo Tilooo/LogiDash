@@ -8,4 +8,6 @@ urlpatterns = [
     path('forecast/', views.forecast_view, name='forecast'),
     path('map/', views.map_view, name='map'),
     path('suppliers/', views.supplier_analytics_view, name='supplier-analytics'),
+    path('kanban/', views.kanban_view, name='kanban'),
+    path('kanban/update-status/', views.update_order_status, name='update-order-status'),
 ]

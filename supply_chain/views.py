@@ -1,6 +1,6 @@
 # supply_chain/views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Supplier, Order
 import plotly.express as px
 import pandas as pd
@@ -13,6 +13,9 @@ from prophet import Prophet
 import plotly.graph_objs as go
 import folium
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 def dashboard_view(request):
     product_count = Product.objects.count()
@@ -326,3 +329,62 @@ def supplier_analytics_view(request):  # Supplier Performance Analytics with sco
     }
     
     return render(request, 'supply_chain/supplier_analytics.html', context)
+
+def kanban_view(request):
+    MAX_ORDERS_PER_COLUMN = 100
+    
+    # Get total counts first
+    total_counts = {
+        'pending': Order.objects.filter(status='pending').count(),
+        'in_progress': Order.objects.filter(status='in_progress').count(),
+        'shipped': Order.objects.filter(status='shipped').count(),
+        'delivered': Order.objects.filter(status='delivered').count(),
+    }
+    
+    # Get limited orders for display, ordered by most recent first
+    orders_by_status = {
+        'pending': Order.objects.filter(status='pending').select_related('product').order_by('-order_date')[:MAX_ORDERS_PER_COLUMN],
+        'in_progress': Order.objects.filter(status='in_progress').select_related('product').order_by('-order_date')[:MAX_ORDERS_PER_COLUMN],
+        'shipped': Order.objects.filter(status='shipped').select_related('product').order_by('-order_date')[:MAX_ORDERS_PER_COLUMN],
+        'delivered': Order.objects.filter(status='delivered').select_related('product').order_by('-order_date')[:MAX_ORDERS_PER_COLUMN],
+    }
+    
+    context = {
+        'orders_by_status': orders_by_status,
+        'status_counts': total_counts,
+        'total_orders': sum(total_counts.values()),
+        'max_per_column': MAX_ORDERS_PER_COLUMN,
+        'showing_limited': any(count > MAX_ORDERS_PER_COLUMN for count in total_counts.values()),
+    }
+    
+    return render(request, 'supply_chain/kanban.html', context)
+
+
+
+@csrf_exempt
+@require_POST
+def update_order_status(request):
+    try:
+        import json
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        new_status = data.get('status')
+        
+        # Validate status
+        valid_statuses = ['pending', 'in_progress', 'shipped', 'delivered']
+        if new_status not in valid_statuses:
+            return JsonResponse({'success': False, 'error': 'Invalid status'}, status=400)
+        
+        # Update order
+        order = get_object_or_404(Order, order_id=order_id)
+        order.status = new_status
+        order.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Order {order_id} moved to {new_status.replace("_", " ").title()}'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+

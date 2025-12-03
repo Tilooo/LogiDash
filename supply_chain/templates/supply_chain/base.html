@@ -497,6 +497,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'kanban' %}active{% endif %}"
+                            href="{% url 'kanban' %}">
+                            <i class="bi bi-kanban"></i> Kanban
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <button class="theme-toggle-btn" id="themeToggle" aria-label="Toggle theme">
                             <i class="bi bi-moon-stars-fill"></i>
                         </button>
