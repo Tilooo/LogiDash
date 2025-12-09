@@ -185,33 +185,117 @@ def forecast_view(request):
 
 def map_view(request):
     suppliers = Supplier.objects.all()
-
-    m = folium.Map(location=[37.0902, -95.7129], zoom_start=4)
+    m = folium.Map(
+        location=[37.0902, -95.7129], 
+        zoom_start=4,
+        tiles='CartoDB dark_matter',  # dark theme
+        attr='CartoDB'
+    )
     
     # Mock coordinates for demonstration purposes
     mock_coordinates = {
-        0: [40.7128, -74.0060], # New York
-        1: [34.0522, -118.2437], # Los Angeles
-        2: [41.8781, -87.6298], # Chicago
-        3: [29.7604, -95.3698], # Houston
-        4: [33.4484, -112.0740], # Phoenix
+        0: [40.7128, -74.0060],   # New York
+        1: [34.0522, -118.2437],  # Los Angeles
+        2: [41.8781, -87.6298],   # Chicago
+        3: [29.7604, -95.3698],   # Houston
+        4: [33.4484, -112.0740],  # Phoenix
+        5: [39.7392, -104.9903],  # Denver
+        6: [47.6062, -122.3321],  # Seattle
+        7: [42.3601, -71.0589],   # Boston
+        8: [25.7617, -80.1918],   # Miami
+        9: [32.7767, -96.7970],   # Dallas
     }
+
+    # Color scheme
+    colors = ['#d946ef', '#00d4ff', '#22c55e', '#eab308', '#ef4444']
+    icons = ['building', 'industry', 'warehouse', 'truck', 'box']
 
     for i, supplier in enumerate(suppliers):
         coords = mock_coordinates.get(i % len(mock_coordinates))
+        color_choice = colors[i % len(colors)]
+        icon_choice = icons[i % len(icons)]
         
+        # custom HTML popup with styling
+        popup_html = f"""
+        <div style="font-family: 'Inter', sans-serif; min-width: 200px;">
+            <h4 style="color: {color_choice}; margin: 0 0 10px 0; font-size: 16px; font-weight: 600;">
+                {supplier.name}
+            </h4>
+            <div style="color: #333; font-size: 13px; line-height: 1.6;">
+                <p style="margin: 5px 0;"><strong>📍 Address:</strong><br>{supplier.address}</p>
+                <p style="margin: 5px 0;"><strong>📧 Contact:</strong><br>{supplier.contact_email}</p>
+                <p style="margin: 5px 0;"><strong>📞 Phone:</strong><br>{supplier.phone_number}</p>
+            </div>
+        </div>
+        """
+        
+        # marker with custom icon
         folium.Marker(
             coords,
-            popup=f"<b>{supplier.name}</b><br>{supplier.address}",
-            tooltip=supplier.name,
-            icon=folium.Icon(color='blue', icon='info-sign')
+            popup=folium.Popup(popup_html, max_width=300),
+            tooltip=f"<b>{supplier.name}</b>",
+            icon=folium.Icon(
+                color='lightgray',
+                icon_color=color_choice,
+                icon=icon_choice,
+                prefix='fa'
+            )
         ).add_to(m)
+        
+        # a circle marker for visual emphasis
+        folium.CircleMarker(
+            coords,
+            radius=15,
+            color=color_choice,
+            fill=True,
+            fillColor=color_choice,
+            fillOpacity=0.2,
+            weight=2,
+            opacity=0.6
+        ).add_to(m)
+
+    # custom CSS to the map
+    custom_css = """
+    <style>
+        .leaflet-container {
+            background: #1a1a2e !important;
+            font-family: 'Inter', sans-serif;
+        }
+        .leaflet-popup-content-wrapper {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .leaflet-popup-tip {
+            background: rgba(255, 255, 255, 0.98);
+        }
+        .leaflet-tooltip {
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid #d946ef;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            padding: 8px 12px;
+            box-shadow: 0 4px 16px rgba(217, 70, 239, 0.3);
+        }
+        .leaflet-control-zoom a {
+            background: rgba(26, 26, 46, 0.9) !important;
+            color: #d946ef !important;
+            border: 1px solid rgba(217, 70, 239, 0.3) !important;
+        }
+        .leaflet-control-zoom a:hover {
+            background: rgba(217, 70, 239, 0.2) !important;
+        }
+    </style>
+    """
 
     # HTML representation of the map
     map_html = m._repr_html_()
+    map_html = custom_css + map_html
 
     context = {
-        'map_html': map_html
+        'map_html': map_html,
+        'supplier_count': suppliers.count()
     }
 
     return render(request, 'supply_chain/map.html', context)
