@@ -6,6 +6,13 @@ LogiDash is a cutting-edge, data-driven supply chain management solution designe
 
 ## 🚀 Why LogiDash?
 
+In the fast-paced world of logistics, visibility is everything. LogiDash provides a centralised command centre that empowers supply chain managers to:
+
+- **Visualise Performance**: Instantly gauge health metrics with interactive charts and real-time counters.
+- **Predict Demand**: Leverage AI-powered forecasting to anticipate market needs before they happen.
+- **Track Operations**: Monitor order lifecycles from placement to delivery with an intuitive Kanban board.
+- **Geospatial Intelligence**: Visualise supplier networks and distribution centres on an interactive global map.
+
 ## ✨ Key Features
 
 ### 📊 Interactive Dashboard
