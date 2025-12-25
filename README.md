@@ -16,3 +16,7 @@ In the fast-paced world of logistics, visibility is everything. LogiDash provide
 ## ✨ Key Features
 
 ### 📊 Interactive Dashboard
+A powerful command centre featuring:
+- **Real-time Metrics**: Instant view of total products, suppliers, and active categories.
+- **Dynamic Charts**: Interactive Plotly visualisations for category distribution and performance analysis.
+- **Glassmorphism UI**: A modern, sleek interface with animated backgrounds and smooth transitions.
