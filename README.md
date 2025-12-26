@@ -20,3 +20,9 @@ A powerful command centre featuring:
 - **Real-time Metrics**: Instant view of total products, suppliers, and active categories.
 - **Dynamic Charts**: Interactive Plotly visualisations for category distribution and performance analysis.
 - **Glassmorphism UI**: A modern, sleek interface with animated backgrounds and smooth transitions.
+
+### 📦 Smart Product Management
+Efficiently manage your inventory with advanced tools:
+- **Comprehensive Listing**: Organised view of all products with key details (SKU, Category, Supplier).
+- **Powerful Search Engine**: Instantly find items by name, SKU, or description with real-time filtering.
+- **Visual Clarity**: Clean, card-based layout for easy scanning and management.
