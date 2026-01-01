@@ -26,3 +26,9 @@ Efficiently manage your inventory with advanced tools:
 - **Comprehensive Listing**: Organised view of all products with key details (SKU, Category, Supplier).
 - **Powerful Search Engine**: Instantly find items by name, SKU, or description with real-time filtering.
 - **Visual Clarity**: Clean, card-based layout for easy scanning and management.
+
+### 🔮 AI-Powered Demand Forecasting
+Stay ahead of the curve with integrated machine learning:
+- **Prophet Integration**: Uses Facebook's Prophet library to forecast future order trends.
+- **Visual Trends**: Clear, interactive graphs showing historical data alongside 30-day future predictions.
+- **Data-Driven Decisions**: Optimise inventory levels based on accurate demand projections.
