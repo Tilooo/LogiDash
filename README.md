@@ -32,3 +32,10 @@ Stay ahead of the curve with integrated machine learning:
 - **Prophet Integration**: Uses Facebook's Prophet library to forecast future order trends.
 - **Visual Trends**: Clear, interactive graphs showing historical data alongside 30-day future predictions.
 - **Data-Driven Decisions**: Optimise inventory levels based on accurate demand projections.
+
+### 📋 Interactive Order Kanban Board
+Streamline workflow management with a Trello-style board:
+- **Drag-and-Drop Interface**: Effortlessly move orders through stages (Pending → In Progress → Shipped → Delivered).
+- **Real-Time Updates**: Instant status synchronisation without page reloads.
+- **Visual Cues**: Color-coded columns and status indicators for at-a-glance tracking.
+- **Performance Optimised**: Smart pagination handles tens of thousands of orders smoothly.
