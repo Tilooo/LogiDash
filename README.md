@@ -39,3 +39,9 @@ Streamline workflow management with a Trello-style board:
 - **Real-Time Updates**: Instant status synchronisation without page reloads.
 - **Visual Cues**: Color-coded columns and status indicators for at-a-glance tracking.
 - **Performance Optimised**: Smart pagination handles tens of thousands of orders smoothly.
+
+### 🗺️ Geospatial Supply Chain Map
+Visualise your global network:
+- **Interactive Mapping**: Zoom, pan, and explore supplier locations on a dynamic Folium map.
+- **Rich Data Popups**: Click on markers to see detailed supplier information and status.
+- **Network Visibility**: Identify geographical concentration risks and optimisation opportunities.
