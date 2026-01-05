@@ -45,3 +45,9 @@ Visualise your global network:
 - **Interactive Mapping**: Zoom, pan, and explore supplier locations on a dynamic Folium map.
 - **Rich Data Popups**: Click on markers to see detailed supplier information and status.
 - **Network Visibility**: Identify geographical concentration risks and optimisation opportunities.
+
+### 📈 Supplier Analytics
+Deep dive into partner performance:
+- **Reliability Scoring**: Automated scoring system based on order volume and consistency.
+- **Performance Ranking**: Instantly identify top performers and those needing attention.
+- **Comparative Analysis**: Visual bar charts comparing supplier metrics side-by-side.
