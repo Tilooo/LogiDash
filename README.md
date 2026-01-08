@@ -51,3 +51,12 @@ Deep dive into partner performance:
 - **Reliability Scoring**: Automated scoring system based on order volume and consistency.
 - **Performance Ranking**: Instantly identify top performers and those needing attention.
 - **Comparative Analysis**: Visual bar charts comparing supplier metrics side-by-side.
+
+### 📤 Multi-Format Data Integration
+Effortlessly import your supply chain data in multiple formats:
+- **Multiple File Formats**: Support for CSV, Excel (.xlsx, .xls), and JSON files.
+- **Drag-and-Drop Interface**: Intuitive file upload with visual feedback and format badges.
+- **Auto-Detection**: Intelligent format recognition and appropriate parsing for each file type.
+- **Auto-Processing**: Smart parsing of orders, products, and suppliers from any supported format.
+- **Error Handling**: Robust validation and user-friendly error messages to ensure data integrity.
+- **Bulk Import**: Process thousands of records in seconds with optimised batch operations.
