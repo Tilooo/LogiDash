@@ -59,9 +59,17 @@ Effortlessly import your supply chain data in multiple formats:
 - **Auto-Detection**: Intelligent format recognition and appropriate parsing for each file type.
 - **Auto-Processing**: Smart parsing of orders, products, and suppliers from any supported format.
 - **Error Handling**: Robust validation and user-friendly error messages to ensure data integrity.
-- **Bulk Import**: Process thousands of records in seconds with optimized batch operations.
+- **Bulk Import**: Process thousands of records in seconds with optimised batch operations.
 
 ### 🎨 Premium User Experience
 - **Dark & Light Modes**: Fully supported themes that automatically adapt to user preference.
 - **Responsive Design**: Flawless experience across desktop, tablet, and mobile devices.
 - **Animated Backgrounds**: Subtle, flowing gradients and floating orbs create an immersive environment.
+
+## 🛠️ Technology Stack
+
+- **Backend**: Django 5.0 (Python)
+- **Database**: SQLite (Development) / PostgreSQL (Production ready)
+- **Frontend**: HTML5, CSS3, Bootstrap 5, Vanilla JavaScript
+- **Data Science**: Pandas, Prophet, Plotly, Folium, openpyxl
+- **Design**: Glassmorphism aesthetic, CSS Animations, Bootstrap Icons
