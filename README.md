@@ -73,3 +73,5 @@ Effortlessly import your supply chain data in multiple formats:
 - **Frontend**: HTML5, CSS3, Bootstrap 5, Vanilla JavaScript
 - **Data Science**: Pandas, Prophet, Plotly, Folium, openpyxl
 - **Design**: Glassmorphism aesthetic, CSS Animations, Bootstrap Icons
+
+*LogiDash - Empowering Supply Chains with Data & Design.*
