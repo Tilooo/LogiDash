@@ -74,4 +74,6 @@ Effortlessly import your supply chain data in multiple formats:
 - **Data Science**: Pandas, Prophet, Plotly, Folium, openpyxl
 - **Design**: Glassmorphism aesthetic, CSS Animations, Bootstrap Icons
 
+---
+
 *LogiDash - Empowering Supply Chains with Data & Design.*
